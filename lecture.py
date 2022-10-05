@@ -2,6 +2,7 @@ import requests
 from datetime import datetime, timezone
 import math as m
 import smtplib
+import time
 
 MY_LAT = 14.634915
 MY_LONG = -90.506882
@@ -69,12 +70,13 @@ def send_email():
         )
 
 
-if calculate_distance(get_iss_position(), MY_POS) < 500:
-    sunrise_hour, sunset_hour = get_sunrise_time(PARAMS_SUNRISE)
-    time_now_hour = get_time_now()
-    print(time_now_hour)
-    print(sunrise_hour, sunset_hour)
-    if time_now_hour > sunset_hour or time_now_hour < sunrise_hour:
-        send_email()
-        print("wrong calculation of time")
-
+while True:
+    if calculate_distance(get_iss_position(), MY_POS) < 500:
+        sunrise_hour, sunset_hour = get_sunrise_time(PARAMS_SUNRISE)
+        time_now_hour = get_time_now()
+        print(time_now_hour)
+        print(sunrise_hour, sunset_hour)
+        if time_now_hour > sunset_hour or time_now_hour < sunrise_hour:
+            send_email()
+            print("wrong calculation of time")
+    time.sleep(60)
